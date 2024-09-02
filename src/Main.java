@@ -1,5 +1,9 @@
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
+import java.time.format.DateTimeFormatter;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
@@ -17,8 +21,10 @@ public class Main {
             System.out.println("1 - Add User");
             System.out.println("2 - Delete User");
             System.out.println("3 - Update User");
-            System.out.println("4 - Show all the Users");
-            System.out.println("5 - Close");
+            System.out.println("4 - Consumption");
+            System.out.println("5 - Show all the details of users");
+            System.out.println("6 - Rapport");
+            System.out.println("7 - Close");
             System.out.println("////////");
             System.out.println("Choose an option");
             choice = scanner.nextInt();
@@ -75,20 +81,87 @@ public class Main {
                     } else System.out.println("User not found!");
                     break;
                 case 4:
+                    System.out.println("\n ///// Consumptions /////");
+                    int option;
+                    do {
+                        System.out.println("Options");
+                        System.out.println("1 - Add Consumption");
+                        System.out.println("2 - Delete Consumption");
+                        System.out.println("3 - Back");
+                        System.out.println("////////");
+                        System.out.println("Choose an option");
+                        option= scanner.nextInt();
+                        scanner.nextLine();
+                        switch (option){
+                            case 1:
+                                System.out.println("Add Consumption");
+                                System.out.println("\n Enter the cin : ");
+                                String cin_consumption = scanner.next();
+                                scanner.nextLine();
+                                if(users.containsKey(cin_consumption)){
+                                    User user_consumption=users.get(cin_consumption);
+                                    System.out.println("\nEnter the start date (yyyy-MM-dd): ");
+                                    String start_date = scanner.nextLine();
+                                    LocalDate startDate = LocalDate.parse(start_date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+                                    System.out.println("\nEnter the end date (yyyy-MM-dd): ");
+                                    String end_date = scanner.nextLine();
+                                    LocalDate endDate = LocalDate.parse(end_date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+                                    System.out.println("\n Enter the amount carbon  ");
+                                    double carbon=scanner.nextDouble();
+
+                                    Consumption consumption=new Consumption(startDate,endDate,carbon,user_consumption);
+                                    System.out.println(consumption.toString());
+
+                                    user_consumption.addConsumption(consumption);
+                                }
+                                else System.out.println("Cin not found !!!");
+                                break;
+                            case 2:
+                                System.out.println("Delete Consumption");
+                                System.out.println("\n Enter the cin : ");
+                                String cin_consumption_delete = scanner.next();
+                                scanner.nextLine();
+                                if(users.containsKey(cin_consumption_delete)){
+                                    User user_consumption=users.get(cin_consumption_delete);
+                                    System.out.println("\n Enter the id of consumption : ");
+                                    user_consumption.deleteConsumption(scanner.nextInt());
+                                    scanner.nextLine();
+                                }
+                                else System.out.println("Cin not found !!!");
+                                break;
+                        }
+                    }
+                    while (option!=3);
+                    break;
+                case 5:
                     System.out.println("\n ///// All the Users /////");
                     if(!users.isEmpty()){
                         for (User user : users.values()){
                             System.out.println(user.toString());
+                            System.out.println("/// Consumption ///");
+                            System.out.println(user.ShowAllConsumption());
+                            System.out.println("////////////////////////////////");
                         }
                     }
                     else System.out.println("Users not found!");
+                    break;
+                case 6:
+                    for (User user : users.values()){
+                        System.out.println(user.toString());
+                        user.dailyRapport();
+                    }
+                    break;
+                case 7:
+                    System.out.println("Close!");
                     break;
                 default:
                     System.out.println("\n invalid Option");
                     break;
             }
         }
-        while (choice!=5);
+        while (choice!=7);
 
 
     }
