@@ -107,6 +107,11 @@ public class Main {
                                     System.out.println("\nEnter the end date (yyyy-MM-dd): ");
                                     String end_date = scanner.nextLine();
                                     LocalDate endDate = LocalDate.parse(end_date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                    while(endDate.isBefore(startDate)){
+                                         System.out.println("\nEnter the end date (yyyy-MM-dd): After = "+ start_date);
+                                         end_date = scanner.nextLine();
+                                         endDate = LocalDate.parse(end_date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                    }
 
                                     System.out.println("\n Enter the amount carbon  ");
                                     double carbon=scanner.nextDouble();
@@ -131,6 +136,12 @@ public class Main {
                                 }
                                 else System.out.println("Cin not found !!!");
                                 break;
+                            case 3:
+                                System.out.println("Close!");
+                                break;
+                            default:
+                                System.out.println("\n invalid Option");
+                                break;
                         }
                     }
                     while (option!=3);
@@ -148,10 +159,49 @@ public class Main {
                     else System.out.println("Users not found!");
                     break;
                 case 6:
-                    for (User user : users.values()){
-                        System.out.println(user.toString());
-                        user.dailyRapport();
+                    System.out.println("\n ///// Rapport /////");
+                    int choix;
+                    do {
+                        System.out.println("Options");
+                        System.out.println("1 - Rapport daily");
+                        System.out.println("2 - Rapport Weekly");
+                        System.out.println("3 - Rapport monthly");
+                        System.out.println("4 - close");
+                        System.out.println("////////");
+                        System.out.println("Choose an option");
+                        choix= scanner.nextInt();
+                        scanner.nextLine();
+                        switch (choix){
+                            case 1:
+                                System.out.println("Rapport daily");
+                                for (User user : users.values()){
+                                    System.out.println(user.toString());
+                                    user.dailyRapport();
+                                }
+                                break;
+                            case 2:
+                                System.out.println("Rapport weekly");
+                                for (User user : users.values()){
+                                    System.out.println(user.toString());
+                                    user.dailyRapport();
+                                }
+                                break;
+                            case 3:
+                                System.out.println("Rapport monthly");
+                                for (User user : users.values()){
+                                    System.out.println(user.toString());
+                                    user.dailyRapport();
+                                }
+                                break;
+                            case 4:
+                                System.out.println("Close!");
+                                break;
+                            default:
+                                System.out.println("\n invalid Option");
+                                break;
+                        }
                     }
+                    while (choix!=4);
                     break;
                 case 7:
                     System.out.println("Close!");

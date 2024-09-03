@@ -61,11 +61,10 @@ public class User {
         for (Consumption c : this.consumptions) {
             double dailyCarbon = c.getCarbon() / (ChronoUnit.DAYS.between(c.getDate_db(), c.getDate_fin()) + 1);
             for (LocalDate date = c.getDate_db(); !date.isAfter(c.getDate_fin()); date = date.plusDays(1)) {
-                System.out.println(date + " : " + String.format("%.2f", dailyCarbon) + " carbon");
+                System.out.println(date + " : " + dailyCarbon + " carbon");
             }
         }
     }
-
 
 
     public String ShowAllConsumption(){
@@ -75,9 +74,7 @@ public class User {
     }
     public Consumption find(int id){
         for (Consumption c : this.consumptions) {
-            if (c.getId() == id) {
-                return c;
-            }
+            if (c.getId() == id) return c;
         }
         return null;
     }

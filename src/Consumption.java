@@ -25,9 +25,7 @@ public class Consumption  {
         this.carbon = carbon;
         this.user=user;
     }
-    public Consumption(){
-
-    }
+    public Consumption(){}
 
     public LocalDate getDate_db() {
         return date_db;
