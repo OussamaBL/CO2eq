@@ -1,6 +1,8 @@
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class User {
@@ -19,8 +21,6 @@ public class User {
     public User() {
         this.consumptions = new ArrayList<>();
     }
-
-
 
     public String getCin() {
         return cin;
@@ -56,16 +56,41 @@ public class User {
         this.consumptions.add(consumption);
         System.out.println("Consumption added successfully");
     }
-
+    public void sortConsumptionsByDate() {
+        this.consumptions.sort(new Comparator<Consumption>() {
+            @Override
+            public int compare(Consumption c1, Consumption c2) {
+                return c1.getDate_db().compareTo(c2.getDate_db());
+            }
+        });
+    }
     public void dailyRapport() {
+        this.sortConsumptionsByDate();
         for (Consumption c : this.consumptions) {
             double dailyCarbon = c.getCarbon() / (ChronoUnit.DAYS.between(c.getDate_db(), c.getDate_fin()) + 1);
             for (LocalDate date = c.getDate_db(); !date.isAfter(c.getDate_fin()); date = date.plusDays(1)) {
-                System.out.println(date + " : " + dailyCarbon + " carbon");
+                System.out.println(date + " ==> " + String.format("%.2f", dailyCarbon) + " carbon");
             }
         }
     }
+    public void weeklyRapport() {
+        this.sortConsumptionsByDate();
+        for (Consumption c : this.consumptions) {
+            double dailyCarbon = c.getCarbon() / (ChronoUnit.DAYS.between(c.getDate_db(), c.getDate_fin()) + 1);
+            LocalDate startDate = c.getDate_db();
+            LocalDate endDate = c.getDate_fin();
+            LocalDate weekStart = startDate;
 
+            while (!weekStart.isAfter(endDate)) {
+                LocalDate weekEnd=weekStart.plusDays(6);
+                //double weeklyCarbon = dailyCarbon * (ChronoUnit.DAYS.between(weekStart, weekEnd) + 1);
+                //System.out.println(weekStart + " to " + weekEnd + " ==> " + weeklyCarbon + " carbon");
+                double weeklyCarbon = c.getCarbon() / (ChronoUnit.DAYS.between(weekStart, weekEnd) + 1);
+                System.out.println(weekStart + " to " + weekEnd + " ==> " + String.format("%.2f", weeklyCarbon) + " carbon");
+                weekStart = weekEnd.plusDays(1);
+            }
+        }
+    }
 
     public String ShowAllConsumption(){
         String details="";

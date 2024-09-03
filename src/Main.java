@@ -9,7 +9,6 @@ import java.time.format.DateTimeFormatter;
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
-
         HashMap<String, User> users = new HashMap<String, User>();
 
         Scanner scanner = new Scanner(System.in);
@@ -183,7 +182,7 @@ public class Main {
                                 System.out.println("Rapport weekly");
                                 for (User user : users.values()){
                                     System.out.println(user.toString());
-                                    user.dailyRapport();
+                                    user.weeklyRapport();
                                 }
                                 break;
                             case 3:
