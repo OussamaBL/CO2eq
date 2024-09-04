@@ -82,16 +82,43 @@ public class User {
             LocalDate weekStart = startDate;
 
             while (!weekStart.isAfter(endDate)) {
+                double weeklyCarbon;
                 LocalDate weekEnd=weekStart.plusDays(6);
-                //double weeklyCarbon = dailyCarbon * (ChronoUnit.DAYS.between(weekStart, weekEnd) + 1);
+                if(weekEnd.isBefore(endDate))
+                     weeklyCarbon = dailyCarbon * (ChronoUnit.DAYS.between(weekStart, weekEnd) + 1);
+                    // weeklyCarbon = c.getCarbon() / (ChronoUnit.DAYS.between(weekStart, weekEnd) + 1);
+
+                else weeklyCarbon = (dailyCarbon * (ChronoUnit.DAYS.between(weekStart, endDate) + 1)) / (ChronoUnit.DAYS.between(weekStart, weekEnd) + 1) ;
                 //System.out.println(weekStart + " to " + weekEnd + " ==> " + weeklyCarbon + " carbon");
-                double weeklyCarbon = c.getCarbon() / (ChronoUnit.DAYS.between(weekStart, weekEnd) + 1);
+                //double weeklyCarbon = c.getCarbon() / (ChronoUnit.DAYS.between(weekStart, weekEnd) + 1);
                 System.out.println(weekStart + " to " + weekEnd + " ==> " + String.format("%.2f", weeklyCarbon) + " carbon");
                 weekStart = weekEnd.plusDays(1);
             }
         }
     }
 
+    public void monthlyRapport() {
+        this.sortConsumptionsByDate();
+        for (Consumption c : this.consumptions) {
+            double dailyCarbon = c.getCarbon() / (ChronoUnit.DAYS.between(c.getDate_db(), c.getDate_fin()) + 1);
+            LocalDate startDate = c.getDate_db();
+            LocalDate endDate = c.getDate_fin();
+            LocalDate monthStart = startDate.withDayOfMonth(1); // Start of the first month
+
+            while (!monthStart.isAfter(endDate)) {
+                LocalDate monthEnd = monthStart.withDayOfMonth(monthStart.lengthOfMonth()); // End of the current month
+                if (monthEnd.isAfter(endDate)) {
+                    monthEnd = endDate; // Adjust monthEnd to be within the consumption period
+                }
+
+                long daysInMonth = ChronoUnit.DAYS.between(monthStart, monthEnd) + 1;
+                double monthlyCarbon = dailyCarbon * daysInMonth;
+                System.out.println(monthStart + " to " + monthEnd + " ==> " + String.format("%.2f", monthlyCarbon) + " carbon");
+
+                monthStart = monthStart.plusMonths(1).withDayOfMonth(1); // Move to the next month
+            }
+        }
+    }
     public String ShowAllConsumption(){
         String details="";
         for(Consumption c : this.consumptions) details += c.toString();
