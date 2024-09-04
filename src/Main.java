@@ -189,7 +189,7 @@ public class Main {
                                 System.out.println("Rapport monthly");
                                 for (User user : users.values()){
                                     System.out.println(user.toString());
-                                    user.dailyRapport();
+                                    user.monthlyRapport();
                                 }
                                 break;
                             case 4:

@@ -103,19 +103,21 @@ public class User {
             double dailyCarbon = c.getCarbon() / (ChronoUnit.DAYS.between(c.getDate_db(), c.getDate_fin()) + 1);
             LocalDate startDate = c.getDate_db();
             LocalDate endDate = c.getDate_fin();
-            LocalDate monthStart = startDate.withDayOfMonth(1); // Start of the first month
+            LocalDate monthStart = startDate.withDayOfMonth(1);
 
             while (!monthStart.isAfter(endDate)) {
-                LocalDate monthEnd = monthStart.withDayOfMonth(monthStart.lengthOfMonth()); // End of the current month
+                double monthlyCarbon;
+                LocalDate monthEnd = monthStart.plusMonths(1).minusDays(1);
+
                 if (monthEnd.isAfter(endDate)) {
-                    monthEnd = endDate; // Adjust monthEnd to be within the consumption period
+                    monthEnd = endDate;
                 }
 
-                long daysInMonth = ChronoUnit.DAYS.between(monthStart, monthEnd) + 1;
-                double monthlyCarbon = dailyCarbon * daysInMonth;
+                monthlyCarbon = dailyCarbon * (ChronoUnit.DAYS.between(monthStart, monthEnd) + 1);
+
                 System.out.println(monthStart + " to " + monthEnd + " ==> " + String.format("%.2f", monthlyCarbon) + " carbon");
 
-                monthStart = monthStart.plusMonths(1).withDayOfMonth(1); // Move to the next month
+                monthStart = monthStart.plusMonths(1).withDayOfMonth(1);
             }
         }
     }
