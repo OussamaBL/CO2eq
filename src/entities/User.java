@@ -1,3 +1,5 @@
+package entities;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -54,7 +56,7 @@ public class User {
             }
         }
         this.consumptions.add(consumption);
-        System.out.println("Consumption added successfully");
+        System.out.println("entities.Consumption added successfully");
     }
     public void sortConsumptionsByDate() {
         this.consumptions.sort(new Comparator<Consumption>() {
@@ -136,14 +138,14 @@ public class User {
         Consumption c=this.find(id);
         if(c!=null){
             this.consumptions.remove(c);
-            System.out.println("Consumption with id " + id + " removed successfully.");
+            System.out.println("entities.Consumption with id " + id + " removed successfully.");
         }
-        else System.out.println("Consumption not found");
+        else System.out.println("entities.Consumption not found");
     }
 
     @Override
     public String toString() {
-        return "User {" +
+        return "entities.User {" +
                 "cin=" + cin +
                 ",name='" + name + '\'' +
                 ",age=" + age +

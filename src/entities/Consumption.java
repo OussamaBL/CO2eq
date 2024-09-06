@@ -1,31 +1,27 @@
+package entities;
+
+import entities.User;
+
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Consumption  {
+public abstract class Consumption  {
 
-    private static final AtomicInteger count = new AtomicInteger(0);
-    private LocalDate date_db ;
-    private LocalDate date_fin ;
-    private int id;
-    private double carbon ;
-    private User user;
+    protected LocalDate date_db ;
+    protected LocalDate date_fin ;
+    protected int id;
+    protected double carbon ;
+    protected User user;
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public Consumption(LocalDate date_db, LocalDate date_fin, double carbon,User user) {
         this.date_db = date_db;
         this.date_fin = date_fin;
-        this.id = count.incrementAndGet();
         this.carbon = carbon;
         this.user=user;
     }
     public Consumption(){}
+    public Consumption(int id){ this.id=id;}
 
     public LocalDate getDate_db() {
         return date_db;
@@ -59,13 +55,22 @@ public class Consumption  {
         this.carbon = carbon;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
-        return "Consumption {" +
+        return "entities.Consumption {" +
                 "date_db=" + date_db +
                 "id=" + id +
                 ", date_fin=" + date_fin +
                 ", carbon=" + carbon +
                 '}';
     }
+    public abstract double calculerImpact();
 }

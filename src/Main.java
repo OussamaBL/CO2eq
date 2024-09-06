@@ -1,7 +1,9 @@
+import config.connexion;
+import entities.Consumption;
+import entities.User;
+
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
 
@@ -9,6 +11,10 @@ import java.time.format.DateTimeFormatter;
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
+        connexion cnx=new connexion("org.postgresql.Driver","jdbc:postgresql://localhost:5432/GreenPulse","GreenPulse","");
+        cnx.SeConnecter();
+
+
         HashMap<String, User> users = new HashMap<String, User>();
 
         Scanner scanner = new Scanner(System.in);
@@ -17,10 +23,10 @@ public class Main {
         int choice;
         do {
             System.out.println("Options");
-            System.out.println("1 - Add User");
-            System.out.println("2 - Delete User");
-            System.out.println("3 - Update User");
-            System.out.println("4 - Consumption");
+            System.out.println("1 - Add entities.User");
+            System.out.println("2 - Delete entities.User");
+            System.out.println("3 - Update entities.User");
+            System.out.println("4 - entities.Consumption");
             System.out.println("5 - Show all the details of users");
             System.out.println("6 - Rapport");
             System.out.println("7 - Close");
@@ -29,7 +35,7 @@ public class Main {
             choice = scanner.nextInt();
             switch (choice){
                 case 1:
-                    System.out.println("\n ///// Add User /////");
+                    System.out.println("\n ///// Add entities.User /////");
                     User u=new User();
                     System.out.println("\n Enter the cin : ");
                     String cin = scanner.next();
@@ -42,13 +48,13 @@ public class Main {
                         u.setAge(scanner.nextInt());
                         scanner.nextLine();
                         users.put(u.getCin(),u); //Insert
-                        System.out.println("\n /// User Added successfully /// ");
+                        System.out.println("\n /// entities.User Added successfully /// ");
                     }
                     else System.out.println("Cin already exist !!!");
                     break;
 
                 case 2:
-                    System.out.println("\n ///// Delete User /////");
+                    System.out.println("\n ///// Delete entities.User /////");
                     System.out.println("\n Enter the Cin : ");
                     String cin_delete= scanner.next();
                     if (users.containsKey(cin_delete)) {
@@ -56,15 +62,15 @@ public class Main {
                         String confirmation = scanner.next();
                         if (confirmation.equalsIgnoreCase("yes")) {
                             users.remove(cin_delete); // Remove the user
-                            System.out.println("User deleted successfully.");
+                            System.out.println("entities.User deleted successfully.");
                         } else {
-                            System.out.println("User deletion canceled.");
+                            System.out.println("entities.User deletion canceled.");
                         }
                     }
-                    else System.out.println("User not found!");
+                    else System.out.println("entities.User not found!");
                     break;
                 case 3:
-                    System.out.println("\n ///// Update User /////");
+                    System.out.println("\n ///// Update entities.User /////");
                     System.out.println("Enter the cin of the user to update:");
                     String updateCin = scanner.next();
                     if (users.containsKey(updateCin)) {
@@ -75,17 +81,17 @@ public class Main {
                         user.setAge(scanner.nextInt());
                         scanner.nextLine();
                         users.put(updateCin, user); // Update
-                        System.out.println("User updated successfully!");
+                        System.out.println("entities.User updated successfully!");
 
-                    } else System.out.println("User not found!");
+                    } else System.out.println("entities.User not found!");
                     break;
                 case 4:
                     System.out.println("\n ///// Consumptions /////");
                     int option;
                     do {
                         System.out.println("Options");
-                        System.out.println("1 - Add Consumption");
-                        System.out.println("2 - Delete Consumption");
+                        System.out.println("1 - Add entities.Consumption");
+                        System.out.println("2 - Delete entities.Consumption");
                         System.out.println("3 - Back");
                         System.out.println("////////");
                         System.out.println("Choose an option");
@@ -93,7 +99,7 @@ public class Main {
                         scanner.nextLine();
                         switch (option){
                             case 1:
-                                System.out.println("Add Consumption");
+                                System.out.println("Add entities.Consumption");
                                 System.out.println("\n Enter the cin : ");
                                 String cin_consumption = scanner.next();
                                 scanner.nextLine();
@@ -115,15 +121,15 @@ public class Main {
                                     System.out.println("\n Enter the amount carbon  ");
                                     double carbon=scanner.nextDouble();
 
-                                    Consumption consumption=new Consumption(startDate,endDate,carbon,user_consumption);
-                                    System.out.println(consumption.toString());
+                                    //Consumption consumption=new Consumption(startDate,endDate,carbon,user_consumption);
+                                    //System.out.println(consumption.toString());
 
-                                    user_consumption.addConsumption(consumption);
+                                    //user_consumption.addConsumption(consumption);
                                 }
                                 else System.out.println("Cin not found !!!");
                                 break;
                             case 2:
-                                System.out.println("Delete Consumption");
+                                System.out.println("Delete entities.Consumption");
                                 System.out.println("\n Enter the cin : ");
                                 String cin_consumption_delete = scanner.next();
                                 scanner.nextLine();
@@ -150,7 +156,7 @@ public class Main {
                     if(!users.isEmpty()){
                         for (User user : users.values()){
                             System.out.println(user.toString());
-                            System.out.println("/// Consumption ///");
+                            System.out.println("/// entities.Consumption ///");
                             System.out.println(user.ShowAllConsumption());
                             System.out.println("////////////////////////////////");
                         }
