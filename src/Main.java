@@ -2,6 +2,7 @@ import config.connexion;
 import entities.Consumption;
 import entities.User;
 
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -11,9 +12,7 @@ import java.time.format.DateTimeFormatter;
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
-        connexion cnx=new connexion("org.postgresql.Driver","jdbc:postgresql://localhost:5432/GreenPulse","GreenPulse","");
-        cnx.SeConnecter();
-
+        Connection cnx= connexion.getInstance();
 
         HashMap<String, User> users = new HashMap<String, User>();
 

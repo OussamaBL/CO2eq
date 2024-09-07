@@ -5,74 +5,81 @@
     import java.sql.SQLException;
 
     public class connexion {
-        private String Pilote;
-        private String URL ;
-        private String Login ;
-        private String Password ;
-        private Connection MyConnexion ;
+        private String pilote;
+        private String url;
+        private String login;
+        private String password;
+        private static Connection myConnexion;
 
-        public connexion(String Pilote,String URL, String login, String password) {
-            this.URL = URL;
-            this.Login = login;
-            this.Password = password;
-            this.Pilote=Pilote;
+       private connexion(String pilote, String url, String login, String password) {
+            this.pilote = pilote;
+            this.url = url;
+            this.login = login;
+            this.password = password;
+        }
+        private connexion() {
+            this.pilote = "org.postgresql.Driver";
+            this.url = "jdbc:postgresql://localhost:5432/GreenPulse";
+            this.login = "GreenPulse";
+            this.password = "";
+        }
+
+        public static Connection getInstance() {
+            if (myConnexion == null) {
+                try {
+                    connexion cnx=new connexion();
+                    Class.forName(cnx.getPilote());
+                    System.out.println("Chargement de Pilote OK ....");
+                    myConnexion = DriverManager.getConnection(cnx.getURL(), cnx.getLogin(), cnx.getPassword());
+                    System.out.println("Connexion établie : Go ...");
+                } catch (ClassNotFoundException ex) {
+                    System.err.println("Problème de chargement du Pilote !!!!");
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+            return myConnexion;
         }
 
         public String getPilote() {
-            return Pilote;
+            return pilote;
         }
 
         public void setPilote(String pilote) {
-            Pilote = pilote;
+            pilote = pilote;
         }
 
         public String getURL() {
-            return URL;
+            return url;
         }
 
-        public void setURL(String URL) {
-            this.URL = URL;
+        public void setURL(String url) {
+            this.url = url;
         }
 
         public String getLogin() {
-            return Login;
+            return login;
         }
 
         public void setLogin(String login) {
-            Login = login;
+            login = login;
         }
 
         public String getPassword() {
-            return Password;
+            return password;
         }
 
         public void setPassword(String password) {
-            Password = password;
+            password = password;
         }
 
         public Connection getMyConnexion() {
-            return MyConnexion;
+            return myConnexion;
         }
 
         public void setMyConnexion(Connection myConnexion) {
-            MyConnexion = myConnexion;
+            myConnexion = myConnexion;
         }
-        public connexion(){}
 
-        public void SeConnecter(){
-            try{
-                Class.forName(this.Pilote);
-                System.out.println(" Chargement de Pilote OK ....");
-                this.MyConnexion = DriverManager.getConnection(URL, Login, Password);
-                System.out.println("Connexion établie : Go ...");
-            }
-            catch (ClassNotFoundException ex)
-            {
-                System.err.println(" Problème de chargement du Pilote !!!!");
-            }
-            catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
-        }
     }
