@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
 
@@ -179,15 +180,18 @@ public class Main {
                     break;
                 case 5:
                     System.out.println("\n ///// All the Users /////");
-                    if(!users.isEmpty()){
-                        for (User user : users.values()){
-                            System.out.println(user.toString());
-                            System.out.println("/// Consumption ///");
-                            System.out.println(user.ShowAllConsumption());
-                            System.out.println("////////////////////////////////");
+                    try {
+                        List<User> listUsers=urp.readAll();
+                        if(listUsers!=null){
+                            for (User user : listUsers){
+                                System.out.println(user);
+                                System.out.println("////////////////////////////////");
+                            }
                         }
+                    } catch (SQLException e) {
+                        System.out.println(e.getMessage());
                     }
-                    else System.out.println("Users not found!");
+
                     break;
                 case 6:
                     System.out.println("\n ///// Rapport /////");

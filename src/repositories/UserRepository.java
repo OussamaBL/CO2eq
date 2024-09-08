@@ -55,9 +55,15 @@ public class UserRepository implements UserInterface {
         List<User> users = new ArrayList<>();
         PreparedStatement stmt = cnx.prepareStatement(query);
         ResultSet rs=stmt.executeQuery();
-        while(rs.next()){
-            User user=new User(rs.getString("cin"),rs.getString("name"),rs.getInt("age"));
-            users.add(user);
+
+        if (!rs.isBeforeFirst()) {  // Check if result set is empty
+            System.out.println("No users found.");
+            return null;
+        } else {
+            while (rs.next()) {
+                User user = new User(rs.getString("cin"), rs.getString("name"), rs.getInt("age"));
+                users.add(user);
+            }
         }
         return users;
     }
