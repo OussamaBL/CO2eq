@@ -1,8 +1,10 @@
 import config.connexion;
 import entities.Consumption;
 import entities.User;
+import repositories.UserRepository;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -12,20 +14,19 @@ import java.time.format.DateTimeFormatter;
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
-        Connection cnx= connexion.getInstance();
 
         HashMap<String, User> users = new HashMap<String, User>();
-
+        UserRepository urp=new UserRepository();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome in GreenPulse !!!!");
         System.out.println("//////////////");
         int choice;
         do {
             System.out.println("Options");
-            System.out.println("1 - Add entities.User");
-            System.out.println("2 - Delete entities.User");
-            System.out.println("3 - Update entities.User");
-            System.out.println("4 - entities.Consumption");
+            System.out.println("1 - Add User");
+            System.out.println("2 - Delete User");
+            System.out.println("3 - Update User");
+            System.out.println("4 - Consumption");
             System.out.println("5 - Show all the details of users");
             System.out.println("6 - Rapport");
             System.out.println("7 - Close");
@@ -34,63 +35,89 @@ public class Main {
             choice = scanner.nextInt();
             switch (choice){
                 case 1:
-                    System.out.println("\n ///// Add entities.User /////");
+
+                    System.out.println("\n ///// Add User /////");
                     User u=new User();
                     System.out.println("\n Enter the cin : ");
                     String cin = scanner.next();
                     scanner.nextLine();
-                    if(!users.containsKey(cin)){
-                        u.setCin(cin);
-                        System.out.println("\n Enter the name : ");
-                        u.setName(scanner.next());
-                        System.out.println("\n Enter the Age : ");
-                        u.setAge(scanner.nextInt());
-                        scanner.nextLine();
-                        users.put(u.getCin(),u); //Insert
-                        System.out.println("\n /// entities.User Added successfully /// ");
+                    try {
+                        if (urp.read(new User(cin))==null) {
+                            u.setCin(cin);
+                            System.out.println("\n Enter the name : ");
+                            u.setName(scanner.next());
+                            System.out.println("\n Enter the Age : ");
+                            u.setAge(scanner.nextInt());
+                            scanner.nextLine();
+                            //users.put(u.getCin(),u);
+                            try {
+                                urp.create(u);
+                            } catch (SQLException e) {
+                                System.out.println(e.getMessage());
+                            }
+                        }
+                    } catch (SQLException e) {
+                        System.out.println(e.getMessage());
                     }
-                    else System.out.println("Cin already exist !!!");
                     break;
 
                 case 2:
-                    System.out.println("\n ///// Delete entities.User /////");
+                    System.out.println("\n ///// Delete User /////");
                     System.out.println("\n Enter the Cin : ");
                     String cin_delete= scanner.next();
-                    if (users.containsKey(cin_delete)) {
-                        System.out.println("Are you sure you want to delete the user? (yes/no)");
-                        String confirmation = scanner.next();
-                        if (confirmation.equalsIgnoreCase("yes")) {
-                            users.remove(cin_delete); // Remove the user
-                            System.out.println("entities.User deleted successfully.");
-                        } else {
-                            System.out.println("entities.User deletion canceled.");
+                    try {
+                        if (urp.read(new User(cin_delete))!=null) {
+                            System.out.println("Are you sure you want to delete the user? (yes/no)");
+                            String confirmation = scanner.next();
+                            if (confirmation.equalsIgnoreCase("yes")) {
+                                //users.remove(cin_delete); // Remove the user
+                                try {
+                                    urp.delete(new User(cin_delete));
+
+                                } catch (SQLException e) {
+                                    System.out.println(e.getMessage());
+                                }
+
+                            } else {
+                                System.out.println("User deletion canceled.");
+                            }
                         }
+                    } catch (SQLException e) {
+                        System.out.println(e.getMessage());
                     }
-                    else System.out.println("entities.User not found!");
                     break;
                 case 3:
-                    System.out.println("\n ///// Update entities.User /////");
+                    System.out.println("\n ///// Update User /////");
                     System.out.println("Enter the cin of the user to update:");
                     String updateCin = scanner.next();
-                    if (users.containsKey(updateCin)) {
-                        User user = users.get(updateCin);
-                        System.out.println("Enter the new name:");
-                        user.setName(scanner.next());
-                        System.out.println("Enter the new age:");
-                        user.setAge(scanner.nextInt());
-                        scanner.nextLine();
-                        users.put(updateCin, user); // Update
-                        System.out.println("entities.User updated successfully!");
+                    try {
+                        if (urp.read(new User(updateCin))!=null) {
+                            User user = new User(updateCin);
+                            System.out.println("Enter the new name:");
+                            user.setName(scanner.next());
+                            System.out.println("Enter the new age:");
+                            user.setAge(scanner.nextInt());
+                            scanner.nextLine();
+                            //users.put(updateCin, user); // Update
+                            try {
+                                urp.update(user);
 
-                    } else System.out.println("entities.User not found!");
+                            } catch (SQLException e) {
+                                System.out.println(e.getMessage());
+                            }
+
+                        }
+                    } catch (SQLException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 4:
                     System.out.println("\n ///// Consumptions /////");
                     int option;
                     do {
                         System.out.println("Options");
-                        System.out.println("1 - Add entities.Consumption");
-                        System.out.println("2 - Delete entities.Consumption");
+                        System.out.println("1 - Add Consumption");
+                        System.out.println("2 - Delete Consumption");
                         System.out.println("3 - Back");
                         System.out.println("////////");
                         System.out.println("Choose an option");
@@ -98,7 +125,7 @@ public class Main {
                         scanner.nextLine();
                         switch (option){
                             case 1:
-                                System.out.println("Add entities.Consumption");
+                                System.out.println("Add Consumption");
                                 System.out.println("\n Enter the cin : ");
                                 String cin_consumption = scanner.next();
                                 scanner.nextLine();
@@ -128,7 +155,7 @@ public class Main {
                                 else System.out.println("Cin not found !!!");
                                 break;
                             case 2:
-                                System.out.println("Delete entities.Consumption");
+                                System.out.println("Delete Consumption");
                                 System.out.println("\n Enter the cin : ");
                                 String cin_consumption_delete = scanner.next();
                                 scanner.nextLine();
@@ -155,7 +182,7 @@ public class Main {
                     if(!users.isEmpty()){
                         for (User user : users.values()){
                             System.out.println(user.toString());
-                            System.out.println("/// entities.Consumption ///");
+                            System.out.println("/// Consumption ///");
                             System.out.println(user.ShowAllConsumption());
                             System.out.println("////////////////////////////////");
                         }

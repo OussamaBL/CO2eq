@@ -19,6 +19,10 @@ public class User {
         this.age = age;
         this.consumptions = new ArrayList<>();
     }
+    public User(String cin){
+        this.cin=cin;
+        consumptions= new ArrayList<>();
+    }
 
     public User() {
         this.consumptions = new ArrayList<>();
@@ -145,7 +149,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "entities.User {" +
+        return "User {" +
                 "cin=" + cin +
                 ",name='" + name + '\'' +
                 ",age=" + age +
