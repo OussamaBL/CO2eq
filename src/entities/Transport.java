@@ -1,15 +1,18 @@
 package entities;
 
+import entities.Enum.ConsumptionType;
+import entities.Enum.TransportType;
+
 import java.time.LocalDate;
 
 public class Transport extends Consumption {
     private double distanceParcourue;
-    private String typeDeVehicule;
+    private TransportType typeDeVehicule;
 
     public Transport(LocalDate date_db, LocalDate date_fin, double carbon, User user, double distanceParcourue, String typeDeVehicule) {
-        super(date_db, date_fin, carbon, user);
+        super(date_db, date_fin, carbon, user, ConsumptionType.TRANSPORT);
         this.distanceParcourue = distanceParcourue;
-        this.typeDeVehicule = typeDeVehicule;
+        this.typeDeVehicule = TransportType.valueOf(typeDeVehicule);
     }
 
     public double getDistanceParcourue() {
@@ -20,12 +23,12 @@ public class Transport extends Consumption {
         this.distanceParcourue = distanceParcourue;
     }
 
-    public String getTypeDeVehicule() {
+    public TransportType getTypeDeVehicule() {
         return typeDeVehicule;
     }
 
     public void setTypeDeVehicule(String typeDeVehicule) {
-        this.typeDeVehicule = typeDeVehicule;
+        this.typeDeVehicule = TransportType.valueOf(typeDeVehicule);
     }
 
     @Override
@@ -39,7 +42,7 @@ public class Transport extends Consumption {
     @Override
     public double calculerImpact() {
         double impactConsumption=0;
-        if(this.typeDeVehicule=="voiture") impactConsumption=0.5;
+        if(this.typeDeVehicule.equals("VOITURE")) impactConsumption=0.5;
         else impactConsumption=0.1;
         return super.getCarbon()*this.distanceParcourue*impactConsumption;
     }

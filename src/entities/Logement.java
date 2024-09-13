@@ -1,15 +1,18 @@
 package entities;
 
+import entities.Enum.ConsumptionType;
+import entities.Enum.LogementType;
+
 import java.time.LocalDate;
 
 public class Logement extends Consumption {
     private double consommationEnergie;
-    private String typeEnergie;
+    private LogementType typeEnergie;
 
     public Logement(LocalDate date_db, LocalDate date_fin, double carbon, User user, double consommationEnergie, String typeEnergie) {
-        super(date_db, date_fin, carbon, user);
+        super(date_db, date_fin, carbon, user, ConsumptionType.LOGEMENT);
         this.consommationEnergie = consommationEnergie;
-        this.typeEnergie = typeEnergie;
+        this.typeEnergie = LogementType.valueOf(typeEnergie);
     }
 
     public double getConsommationEnergie() {
@@ -20,12 +23,12 @@ public class Logement extends Consumption {
         this.consommationEnergie = consommationEnergie;
     }
 
-    public String getTypeEnergie() {
+    public LogementType getTypeEnergie() {
         return typeEnergie;
     }
 
     public void setTypeEnergie(String typeEnergie) {
-        this.typeEnergie = typeEnergie;
+        this.typeEnergie = LogementType.valueOf(typeEnergie);
     }
 
     @Override
@@ -39,7 +42,7 @@ public class Logement extends Consumption {
     @Override
     public double calculerImpact() {
         double impactConsumption=0;
-        if(this.typeEnergie=="electricité") impactConsumption=1.5;
+        if(this.typeEnergie.equals("ELECTRICITÉ")) impactConsumption=1.5;
         else impactConsumption=2.0;
         return super.getCarbon()*this.consommationEnergie*impactConsumption;
     }

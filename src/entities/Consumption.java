@@ -1,9 +1,8 @@
 package entities;
 
-import entities.User;
+import entities.Enum.ConsumptionType;
 
 import java.time.LocalDate;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class Consumption  {
 
@@ -13,12 +12,22 @@ public abstract class Consumption  {
     protected double carbon ;
     protected User user;
 
+    protected ConsumptionType type;
 
-    public Consumption(LocalDate date_db, LocalDate date_fin, double carbon,User user) {
+    public ConsumptionType getType() {
+        return type;
+    }
+
+    public void setType(ConsumptionType type) {
+        this.type = type;
+    }
+
+    public Consumption(LocalDate date_db, LocalDate date_fin, double carbon, User user, ConsumptionType type) {
         this.date_db = date_db;
         this.date_fin = date_fin;
         this.carbon = carbon;
         this.user=user;
+        this.type=type;
     }
     public Consumption(){}
     public Consumption(int id){ this.id=id;}

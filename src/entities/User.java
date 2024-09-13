@@ -52,6 +52,14 @@ public class User {
         this.age = age;
     }
 
+    public List<Consumption> getConsumptions() {
+        return consumptions;
+    }
+
+    public void setConsumptions(List<Consumption> consumptions) {
+        this.consumptions = consumptions;
+    }
+
     public void addConsumption(Consumption consumption) {
         for (Consumption c : this.consumptions) {
             if (consumption.getDate_db().isBefore(c.getDate_fin()) && consumption.getDate_fin().isAfter(c.getDate_db())) {

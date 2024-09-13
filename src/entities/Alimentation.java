@@ -1,23 +1,26 @@
 package entities;
 
+import entities.Enum.AlimentationType;
+import entities.Enum.ConsumptionType;
+
 import java.time.LocalDate;
 
 public class Alimentation extends Consumption {
-    private String typeAliment;
+    private AlimentationType typeAliment;
     private double poids;
 
     public Alimentation(LocalDate date_db, LocalDate date_fin, double carbon, User user, String typeAliment, double poids) {
-        super(date_db, date_fin, carbon, user);
-        this.typeAliment = typeAliment;
+        super(date_db, date_fin, carbon, user, ConsumptionType.ALIMENTATION);
+        this.typeAliment = AlimentationType.valueOf(typeAliment);
         this.poids = poids;
     }
 
-    public String getTypeAliment() {
+    public AlimentationType getTypeAliment() {
         return typeAliment;
     }
 
     public void setTypeAliment(String typeAliment) {
-        this.typeAliment = typeAliment;
+        this.typeAliment = AlimentationType.valueOf(typeAliment);
     }
 
     public double getPoids() {
@@ -39,7 +42,7 @@ public class Alimentation extends Consumption {
     @Override
     public double calculerImpact() {
         double impactConsumption=0;
-        if(this.typeAliment=="viande") impactConsumption=5.0;
+        if(this.typeAliment.equals("VIANDE")) impactConsumption=5.0;
         else impactConsumption=0.5;
         return super.getCarbon()*this.poids*impactConsumption;
     }
