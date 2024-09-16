@@ -107,6 +107,8 @@ public class UserRepository implements UserInterface {
         return null;
     }
 
+
+
     @Override
     public List<Consumption> getAllConsumptions(User entity) {
         List<Consumption> listConsumptions=new ArrayList<>();

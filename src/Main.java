@@ -362,9 +362,13 @@ public class Main {
                         end_date = scanner.nextLine();
                         endDate = LocalDate.parse(end_date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                     }
-
+                    userServices.filterByInactivite(startDate,endDate);
                     break;
                 case 10:
+                    System.out.println("Trier les utilisateurs en fonction de leur consommation totale de carbone.");
+                    userServices.classementByTotal();
+                    break;
+                case 11:
                     System.out.println("Close!");
                     break;
 
@@ -373,7 +377,7 @@ public class Main {
                     break;
             }
         }
-        while (choice!=10);
+        while (choice!=11);
 
 
     }
