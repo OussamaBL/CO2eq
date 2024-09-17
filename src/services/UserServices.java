@@ -8,6 +8,7 @@ import repositories.UserRepository;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,6 +35,69 @@ public class UserServices {
     }
     public boolean delete(User user){
         return urp.delete(user);
+    }
+
+    public List<Consumption> sortConsumptionsByDate(User user) {
+        List<Consumption> listConsumption=  urp.getAllConsumptions(user);
+        return listConsumption.stream().sorted((c1, c2)-> c1.getDate_db().compareTo(c2.getDate_db())).collect(Collectors.toList());
+
+    }
+    public void dailyRapport(User user) {
+        List<Consumption> listConsumption= this.sortConsumptionsByDate(user);
+        for (Consumption c : listConsumption) {
+            double dailyCarbon = c.getCarbon() / (ChronoUnit.DAYS.between(c.getDate_db(), c.getDate_fin()) + 1);
+            for (LocalDate date = c.getDate_db(); !date.isAfter(c.getDate_fin()); date = date.plusDays(1)) {
+                System.out.println(date + " ==> " + String.format("%.2f", dailyCarbon) + " carbon");
+            }
+        }
+    }
+    public void weeklyRapport(User user) {
+        List<Consumption> listConsumption= this.sortConsumptionsByDate(user);
+        for (Consumption c : listConsumption) {
+            double dailyCarbon = c.getCarbon() / (ChronoUnit.DAYS.between(c.getDate_db(), c.getDate_fin()) + 1);
+            LocalDate startDate = c.getDate_db();
+            LocalDate endDate = c.getDate_fin();
+            LocalDate weekStart = startDate;
+
+            while (!weekStart.isAfter(endDate)) {
+                double weeklyCarbon;
+                LocalDate weekEnd=weekStart.plusDays(6);
+                if(weekEnd.isBefore(endDate))
+                    weeklyCarbon = dailyCarbon * (ChronoUnit.DAYS.between(weekStart, weekEnd) + 1);
+                    // weeklyCarbon = c.getCarbon() / (ChronoUnit.DAYS.between(weekStart, weekEnd) + 1);
+
+                else weeklyCarbon = (dailyCarbon * (ChronoUnit.DAYS.between(weekStart, endDate) + 1)) / (ChronoUnit.DAYS.between(weekStart, weekEnd) + 1) ;
+                //System.out.println(weekStart + " to " + weekEnd + " ==> " + weeklyCarbon + " carbon");
+                //double weeklyCarbon = c.getCarbon() / (ChronoUnit.DAYS.between(weekStart, weekEnd) + 1);
+                System.out.println(weekStart + " to " + weekEnd + " ==> " + String.format("%.2f", weeklyCarbon) + " carbon");
+                weekStart = weekEnd.plusDays(1);
+            }
+        }
+    }
+
+    public void monthlyRapport(User user) {
+        List<Consumption> listConsumption= this.sortConsumptionsByDate(user);
+        for (Consumption c : listConsumption) {
+            double dailyCarbon = c.getCarbon() / (ChronoUnit.DAYS.between(c.getDate_db(), c.getDate_fin()) + 1);
+            LocalDate startDate = c.getDate_db();
+            LocalDate endDate = c.getDate_fin();
+            LocalDate monthStart = startDate.withDayOfMonth(1);
+
+            while (!monthStart.isAfter(endDate)) {
+                double monthlyCarbon;
+                LocalDate monthEnd = monthStart.plusMonths(1).minusDays(1);
+
+                if (monthEnd.isAfter(endDate)) {
+                    monthEnd = endDate;
+                }
+
+                monthlyCarbon = dailyCarbon * (ChronoUnit.DAYS.between(monthStart, monthEnd) + 1);
+
+                System.out.println(monthStart + " to " + monthEnd + " ==> " + String.format("%.2f", monthlyCarbon) + " carbon");
+
+                monthStart = monthStart.plusMonths(1).withDayOfMonth(1);
+            }
+        }
     }
 
     //Filtre 1

@@ -24,7 +24,6 @@ public class ConsumptionRepository implements ConsumptionInterface<Consumption> 
         try{
             cnx.setAutoCommit(false);
             String query="";
-            // Determine the query based on the type of entity
             if (entity instanceof Logement) {
                 query = "insert into logement (date_db, date_fin, carbon, user_cin, type, consommationEnergie, typeEnergie) values (?, ?, ?, ?, ?, ?,?)";
             } else if (entity instanceof Transport) {

@@ -292,21 +292,21 @@ public class Main {
                                 System.out.println("Rapport daily");
                                 for (User user : users.values()){
                                     System.out.println(user.toString());
-                                    user.dailyRapport();
+                                    userServices.dailyRapport(user);
                                 }
                                 break;
                             case 2:
                                 System.out.println("Rapport weekly");
                                 for (User user : users.values()){
                                     System.out.println(user.toString());
-                                    user.weeklyRapport();
+                                    userServices.weeklyRapport(user);
                                 }
                                 break;
                             case 3:
                                 System.out.println("Rapport monthly");
                                 for (User user : users.values()){
                                     System.out.println(user.toString());
-                                    user.monthlyRapport();
+                                    userServices.monthlyRapport(user);
                                 }
                                 break;
                             case 4:
